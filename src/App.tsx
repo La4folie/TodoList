@@ -21,7 +21,8 @@ function App() {
     const todoListId_2 = v1()
 
     const [todoLists, setTodoLists] = useState<Array<TodoListType>>
-    ([{id: todoListId_1, title: "What to learn", filter: "all"},
+    ([
+        {id: todoListId_1, title: "What to learn", filter: "all"},
         {id: todoListId_2, title: "What to buy", filter: "all"}
     ])
     const [tasks, setTasks] = useState<TasksStateType>(
@@ -39,8 +40,6 @@ function App() {
 
         }
     )
-
-    const [filter, setFilter] = useState<FilterValuesType>("all");
     const changeTodoListFilter = (filter: FilterValuesType, todoListId: string) => {
         setTodoLists(todoLists.map((tl) => tl.id === todoListId ? {...tl, filter: filter} : tl))
     }
@@ -51,7 +50,7 @@ function App() {
             title: title,
             isDone: false
         };
-        setTasks({...tasks, [todoListId]: [...tasks[todoListId], newTask]})
+        setTasks({...tasks, [todoListId]: [newTask, ...tasks[todoListId]]})
     }
     const changeTaskStatus = (taskId: string, isDone: boolean, todoListId: string) => {
         setTasks({...tasks, [todoListId]: tasks[todoListId].map((t) => t.id === taskId ? {...t, isDone: isDone} : t)})
@@ -64,7 +63,7 @@ function App() {
         // setTasks(copyTasks)
         setTasks({...tasks, [todoListId]: tasks[todoListId].filter(task => task.id !== id)})
     }
-    const deleteAllTasks = (todoListId: string) => {
+    const RemoveTodoList = (todoListId: string) => {
         const updatedTodoList = todoLists.filter((tl) => tl.id !== todoListId)
         setTodoLists(updatedTodoList)
     }
@@ -81,7 +80,8 @@ function App() {
             }
         }
 
-    const todoListComponents = todoLists.map((tl) => {
+    const todoListComponents = todoLists.length
+        ? todoLists.map((tl) => {
         const filteredTasksForRender = getFilteredTasksForRender(tasks[tl.id], tl.filter)
         return (
             <Todolist
@@ -90,13 +90,14 @@ function App() {
                 tasks={filteredTasksForRender}
                 removeTask={removeTask}
                 changeTodoListFilter={changeTodoListFilter}
-                deleteAllTasks={deleteAllTasks}
+                RemoveTodoList={RemoveTodoList}
                 addTask={addTask}
                 changeTaskStatus={changeTaskStatus}
                 filter={tl.filter}
             />
         )
     })
+        : <span>Create your first todolist!</span>
     return (
         <div className="App">
             {todoListComponents}
