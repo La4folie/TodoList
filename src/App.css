@@ -24,3 +24,8 @@
   opacity: 0.5;
   text-decoration: line-through;
 }
+.addItemForm {
+  border: 2px solid hotpink;
+  border-radius: 3px;
+  padding:10px;
+}
