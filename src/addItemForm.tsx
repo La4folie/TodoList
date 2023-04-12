@@ -1,4 +1,6 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
+import {Button, TextField} from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 type AddItemFormPropsType = {
     addItem:(title: string) => void
@@ -20,18 +22,32 @@ const AddItemForm:FC<AddItemFormPropsType> = (props) => {
         setNewTaskTitle("");
     }
     const errorMessage = error && <div className="error-message">{error}</div>
-    const inputErrorClass = error ? "error" : ""
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         e.key === "Enter" && addItem()
     }
     return (
         <div className={"addItemForm"}>
-            <input value={newTaskTitle}
-                   onChange={onNewTitleChangeHandler}
-                   onKeyDown={onKeyPressHandler}
-                   className={inputErrorClass}
+            <TextField
+                id="outlined-basic"
+                label="EnterTitle"
+                variant="outlined"
+                size={"small"}
+                value={newTaskTitle}
+                onChange={onNewTitleChangeHandler}
+                onKeyDown={onKeyPressHandler}
+                error={error}
+                helperText={error && "Title is required!"}
             />
-            <button onClick={addItem}>+</button>
+            <Button
+                style={{"marginTop": "5px"}}
+                onClick={addItem}
+                size={"small"}
+                color={"primary"}
+                endIcon={<AddCircleIcon/>}
+
+            >
+                Add
+            </Button>
             {errorMessage}
         </div>
     );
